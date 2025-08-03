@@ -1,30 +1,16 @@
 (function(Scratch) {
-    const ws = new WebSocket("ws://192.168.1.5:8765"); // ← Replace this with your computer's local IP
+    'use strict';
 
+    const ws = new WebSocket("ws://localhost:8765");
     let latestCommand = "";
-
-    ws.onopen = () => {
-        console.log("WebSocket connected.");
-    };
 
     ws.onmessage = (event) => {
         try {
-            const data = JSON.parse(event.data);
-            if (data.command) {
-                latestCommand = data.command;
-                console.log("Received command:", latestCommand);
-            }
+            const msg = JSON.parse(event.data);
+            latestCommand = msg.command || "";
         } catch (e) {
-            console.error("Invalid JSON received:", e);
+            console.error("Invalid message format", e);
         }
-    };
-
-    ws.onerror = (error) => {
-        console.error("WebSocket error:", error);
-    };
-
-    ws.onclose = () => {
-        console.warn("WebSocket connection closed.");
     };
 
     class WebSocketExtension {
@@ -36,12 +22,12 @@
                     {
                         opcode: 'getCommand',
                         blockType: Scratch.BlockType.REPORTER,
-                        text: 'latest command',
+                        text: 'latest command'
                     },
                     {
                         opcode: 'clearCommand',
                         blockType: Scratch.BlockType.COMMAND,
-                        text: 'clear command',
+                        text: 'clear command'
                     }
                 ]
             };
