@@ -1,7 +1,7 @@
 (function(Scratch) {
     'use strict';
 
-    const ws = new WebSocket("ws://localhost:8765");
+    const ws = new WebSocket("ws://localhost:1234");
     let latestCommand = "";
 
     ws.onmessage = (event) => {
